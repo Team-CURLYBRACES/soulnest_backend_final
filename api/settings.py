@@ -17,8 +17,8 @@ import mongoengine
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Connecting with MongoDB database
-mongoengine.connect(db='users', host='mongodb+srv://amethajayawardena:turlybraces@users.xdxsaem.mongodb.net/', alias='users')
-
+mongoengine.connect(db='users', host='mongodb+srv://amethajayawardena:turlybraces@users.xdxsaem.mongodb.net/', alias='users_data')
+#mongoengine.disconnect(alias='users_data')
 mongoengine.connect(db='counselors', host='mongodb+srv://amethajayawardena:turlybraces@users.xdxsaem.mongodb.net/', alias='default')
 
 
@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-(q$9rr2^)2vq=i2!-t@x_ct696dk29no@^_sea0^0oc07u#ik6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', '9f69-112-134-151-97.ngrok-free.app']
 
 
 # Application definition

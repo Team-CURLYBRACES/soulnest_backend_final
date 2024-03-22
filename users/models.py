@@ -1,25 +1,29 @@
 from mongoengine import Document, fields
+from uuid import uuid4
 import bcrypt
 
 class User(Document):
-    email           = fields.EmailField()
-    name            = fields.StringField()
+    email           = fields.EmailField(required=True)
+    name            = fields.StringField(required=True)
     date_of_birth   = fields.DateField()
-    gender          = fields.StringField()
-    occupation      = fields.StringField()
+    gender          = fields.StringField(blank=True)
+    occupation      = fields.StringField(blank=True)
     username        = fields.StringField(unique=True, required=True)
     password        = fields.StringField(required=True)
-    interests       = fields.ListField(fields.StringField())
+    interests       = fields.ListField(fields.StringField(blank=True))
+    chats           = fields.ListField(fields.StringField(blank=True))
+    auth_token      = fields.StringField(unique=True, blank=True)
 
     meta={
-        'db_alias' : 'users'
+        'db_alias' : 'users_data'
     }
 
     @classmethod
     def create_user(cls, email, name, dob, gender, occupation, username, password, interests):
         # Hashing password to store it securely
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-        user = cls(email=email, name=name, date_of_birth=dob, gender=gender,
+        token = str(uuid4())
+        user = cls(email=email, name=name, date_of_birth=dob, gender=gender, auth_token=token,
                     occupation=occupation, username=username, password=hashed_password, interests=interests)
         return user
     
