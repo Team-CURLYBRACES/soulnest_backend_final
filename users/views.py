@@ -112,7 +112,7 @@ def get_doctor_details(request : HttpRequest):
             'charge': doctor.charge,
             'image': profile_image_data
             })
-            return JsonResponse(doctor_profiles, safe=False)
+        return JsonResponse(doctor_profiles, safe=False)
         
 @csrf_exempt
 def update_chat_data(request: HttpRequest):
