@@ -7,5 +7,4 @@ urlpatterns = [
     path('register_doctor/', views.register_doctor),
     path('get_details/', views.get_doctor_details),
     path('response/', views.predict_stress_percentage),
-    path('update_chat/', views.update_chat_data)
 ]
