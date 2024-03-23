@@ -4,3 +4,4 @@ pymongo
 mongoengine
 django-cors-headers
 djangorestframework
+uuid
