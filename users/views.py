@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from uuid import uuid4
 from .models import User
 from .models import Doctor
+from .models import Chats
 import json
 import bcrypt
 import base64
@@ -23,11 +24,15 @@ def register_user(request: HttpRequest):
         username    = data.get('username')
         password    = data.get('password')
         interests   = data.get('interests')
-        
+        chats       = data.get('chats')
+        chats = data.get('chats')
+        text = chats.get('text') if chats else None
+        is_stress_checked = chats.get('is_stress_checked') if chats else False
+
         if (User.objects.filter(username = username).count() > 0 or User.objects.filter(email = email).count() > 0):
             return JsonResponse({'message': 'User already exists'}, status=400)
         
-        user = User.create_user(email=email, name=name, dob=dob, gender=gender,
+        user = User.create_user(email=email, name=name, dob=dob, gender=gender, text=text, is_stress_checked=is_stress_checked,
                                  occupation=occupation, username=username, password=password, interests=interests)
         try:
             user.save(using='users_data')
@@ -55,11 +60,10 @@ def login_user(request: HttpRequest):
             user.save()
             return JsonResponse({
                 'message': 'Login successful',
-                'id': str(user.id),
                 "token":token
                 }, status=200)
         else:
-            return JsonResponse({'message':'Login unsuccesssful'})
+            return JsonResponse({'message':'Login unsuccesssful'}, status=401)
 
 
 @csrf_exempt
@@ -117,13 +121,19 @@ def get_doctor_details(request : HttpRequest):
 @csrf_exempt
 def update_chat_data(request: HttpRequest):
     if request.method == 'POST':
+        token = request.headers.get('Authorization')
+        parts = token.split()
+        auth_token = parts[1]
         data = json.loads(request.body)
 
-        chat_input = data.get('prompt')
-        id = data.get('id')
-
-        user = User.objects().get(id=id)
-        print(user.name)
-        user.chats.append(chat_input)
-        user.save()
-    return JsonResponse({"message":"all good"})
+        try:
+            user = User.objects.get(auth_token=auth_token)
+            text = data.get('text')
+            is_stress_checked = data.get('is_stress_checked')
+            new_chat = Chats(text=text, is_stress_checked=is_stress_checked)
+            user.chats.append(new_chat)
+            user.save() 
+            return JsonResponse({"message":"Chat added successfully"}, status=200)
+        except Exception as e:
+            print(e)  
+            return JsonResponse({"message":"The chat was not added to the system"}, status=405)

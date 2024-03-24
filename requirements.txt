@@ -5,3 +5,4 @@ mongoengine
 django-cors-headers
 djangorestframework
 uuid
+requests
