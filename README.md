@@ -71,7 +71,8 @@ or
 ```bash
 source .venv/bin/activate && python flask_app/app.py
 ```
+or
 
-The application will start on `http://127.0.0.1:5000/`. Open this URL in your web browser to see the "Hello, World!" message.
-
-#
+```bash
+python manage.py runserver 0.0.0.0:8002 > server_log.txt 2>&1 &
+```
