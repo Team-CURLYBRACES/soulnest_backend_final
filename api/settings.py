@@ -30,7 +30,7 @@ mongoengine.connect(db='counselors', host='mongodb+srv://amethajayawardena:turly
 SECRET_KEY = 'django-insecure-(q$9rr2^)2vq=i2!-t@x_ct696dk29no@^_sea0^0oc07u#ik6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['139.59.221.132', 'localhost', '*']
 
