@@ -24,13 +24,14 @@ def webhook(request: HttpRequest):
                 "fulfillmentText" : response,
                 "source" : "webhook data" 
             }
+            print(convo)
             return JsonResponse(reply) 
     return HttpResponse('hyyy')
 
 def ask_gpt(prompt):
 
     openai.api_key = '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'
-    client = OpenAI()
+    client = OpenAI(api_key= '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')
 
     completion = client.chat.completions.create(
         model= 'ft:gpt-3.5-turbo-1106:curlybraces:mentalhc:91vJAXms',
