@@ -32,7 +32,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/soul-nest_backend:latest
 
-      - name: SSH into VPS and pull latest changes
+      - name: SSH into VPS and Build Docker Image
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -41,5 +41,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/python/soulnest_backend
-            docker-compose -f docker-compose.yml pull
-            docker-compose -f docker-compose.yml up -d
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/soul-nest_backend:latest
+            docker stop soul-nest_backend-container || true
+            docker rm soul-nest_backend-container || true
+            docker rmi soul-nest_backend-image || true
+            docker build -t soul-nest_backend-image .
+            docker run -d --name soul-nest_backend-container soul-nest_backend-image
