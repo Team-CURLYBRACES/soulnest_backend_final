@@ -22,5 +22,4 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('model/', include('automated_processes.urls')),
     path('', include('landing.urls')),
-    path('get_predictions/', include('chats.urls')),
 ]
