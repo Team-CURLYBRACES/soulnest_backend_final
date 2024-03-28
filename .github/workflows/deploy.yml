@@ -1,12 +1,12 @@
-name: Deploy to VPS
+name: Deploy
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -16,8 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: SSH deploy
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Build Backend (Django) Docker image
+        run: docker build -t kenura/soul-nest_backend:latest -f Dockerfile .
+
+      - name: Push Docker images
+        env:
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        run: |
+          docker push kenura/soul-nest_backend:latest
+
+      - name: SSH into VPS and pull latest changes
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
@@ -25,7 +34,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/python/soulnest_backend
-            git pull origin master -v
-            python3 -m venv venv
-            source venv/bin/activate
-            pip install -r requirements.txt
+            docker-compose -f docker-compose.yml pull
+            docker-compose -f docker-compose.yml up -d

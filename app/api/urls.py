@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('webhook/', include('webhook.urls')),
     path('users/', include('users.urls')),
-    path('index/', include('automated_processes.urls')),
+    path('model/', include('automated_processes.urls')),
     path('', include('landing.urls')),
+    path('get_predictions/', include('chats.urls')),
 ]
