@@ -42,4 +42,4 @@ jobs:
           script: |
             cd /var/www/python/soulnest_backend 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/soul-nest_backend:latest
-            docker-compose up -d --build && exit
+            docker-compose up -d --build
