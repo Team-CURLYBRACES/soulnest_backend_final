@@ -40,11 +40,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /var/www/python/soulnest_backend
+            cd /var/www/python/soulnest_backend 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/soul-nest_backend:latest
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/soul-nest_backend:latest soul-nest_backend-image:latest
-            docker stop soul-nest_backend-container || true
-            docker rm soul-nest_backend-container || true
-            docker rmi soul-nest_backend-image || true
-            docker build -t soul-nest_backend-image .
-            docker run -d --name soul-nest_backend-container soul-nest_backend-image
+            docker-compose up -d --build && exit
