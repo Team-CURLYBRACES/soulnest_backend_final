@@ -54,7 +54,7 @@ def login_user(request: HttpRequest):
 
         user = User.objects(email=email).first()
         if user and bcrypt.checkpw(password.encode(), user.password.encode()):
-            # Password matches! Handle successful login
+            # Password matches. Handle successful login
             token = str(uuid4())
             user['auth_token'] = token
             user.save()
@@ -138,3 +138,15 @@ def update_chat_data(request: HttpRequest):
         except Exception as e:
             print(e)  
             return JsonResponse({"message":"The chat was not added to the system"}, status=405)
+        
+
+@csrf_exempt
+def get_stress_data(request: HttpRequest):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if data:
+            id = data.get('id')
+            user = User.objects(uuid=id).first()
+            stress_data = user.stress_level
+
+            return JsonResponse({"stress_data": stress_data}, status=201)
