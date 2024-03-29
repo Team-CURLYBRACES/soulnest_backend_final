@@ -4,7 +4,7 @@ import requests
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-url = 'http://188.166.196.163:8001/predict'
+url = 'http://188.166.196.163:8001/predict/'
 
 
 @csrf_exempt
