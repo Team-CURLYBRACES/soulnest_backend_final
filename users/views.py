@@ -146,7 +146,7 @@ def get_stress_data(request: HttpRequest):
         token = request.headers.get('Authorization')
         parts = token.split()
         auth_token = parts[1]
-        user = User.objects(uuid=auth_token).first()
+        user = User.objects(auth_token=auth_token).first()
         stress_data = user.stress_level
 
         return JsonResponse({"stress_data": stress_data}, status=201)
