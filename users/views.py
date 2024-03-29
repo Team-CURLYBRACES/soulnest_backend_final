@@ -142,11 +142,11 @@ def update_chat_data(request: HttpRequest):
 
 @csrf_exempt
 def get_stress_data(request: HttpRequest):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        if data:
-            id = data.get('id')
-            user = User.objects(uuid=id).first()
-            stress_data = user.stress_level
+    if request.method == 'GET':
+        token = request.headers.get('Authorization')
+        parts = token.split()
+        auth_token = parts[1]
+        user = User.objects(uuid=auth_token).first()
+        stress_data = user.stress_level
 
-            return JsonResponse({"stress_data": stress_data}, status=201)
+        return JsonResponse({"stress_data": stress_data}, status=201)
