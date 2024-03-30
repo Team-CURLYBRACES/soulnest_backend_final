@@ -39,7 +39,7 @@ def register_user(request: HttpRequest):
             return JsonResponse({
                 'message': 'User registered successfully',
                 'id': user.name
-                }, status=201)
+                }, status=200)
         except Exception as e:
             print(e)
             return JsonResponse({'message': 'Method not allowed'}, status=405)
@@ -94,7 +94,7 @@ def register_doctor(request: HttpRequest):
             doctor.profile_picture.put(profile_picture, content_type = profile_picture.content_type)
         try:
             doctor.save()
-            return JsonResponse({'message': 'Doctor registered successfully'}, status=201)
+            return JsonResponse({'message': 'Doctor registered successfully'}, status=200)
         except Exception as e:
             return JsonResponse({'message': 'Method not allowed'}, status=405)
 
@@ -142,11 +142,13 @@ def update_chat_data(request: HttpRequest):
 
 @csrf_exempt
 def get_stress_data(request: HttpRequest):
-    if request.method == 'GET':
-        token = request.headers.get('Authorization')
-        parts = token.split()
-        auth_token = parts[1]
+    if request.method == 'POST':
+        print('hereeee')
+        data = json.loads(request.body)
+        print(data)
+        auth_token = data.get('token')
+        print(auth_token)
         user = User.objects(auth_token=auth_token).first()
         stress_data = user.stress_level
 
-        return JsonResponse({"stress_data": stress_data}, status=201)
+        return JsonResponse({"stress_data": stress_data}, status=200)
