@@ -34,11 +34,13 @@ def register_user(request: HttpRequest):
         
         user = User.create_user(email=email, name=name, dob=dob, gender=gender, text=text, is_stress_checked=is_stress_checked,
                                  occupation=occupation, username=username, password=password, interests=interests)
+        token = str(uuid4())
+        user['auth_token'] = token
         try:
             user.save(using='users_data')
             return JsonResponse({
                 'message': 'User registered successfully',
-                'id': user.name
+                'id': user.auth_token
                 }, status=200)
         except Exception as e:
             print(e)
@@ -143,11 +145,8 @@ def update_chat_data(request: HttpRequest):
 @csrf_exempt
 def get_stress_data(request: HttpRequest):
     if request.method == 'POST':
-        print('hereeee')
         data = json.loads(request.body)
-        print(data)
         auth_token = data.get('token')
-        print(auth_token)
         user = User.objects(auth_token=auth_token).first()
         stress_data = user.stress_level
 
