@@ -19,12 +19,10 @@ def webhook(request: HttpRequest):
             convo.append({"role" : "user", "content" : query})
             response = ask_gpt(query)
             convo.append({"role" : "assistant", "content" : response})
-            print(response)
             reply = {
                 "fulfillmentText" : response,
                 "source" : "webhook data" 
             }
-            print(convo)
             return JsonResponse(reply) 
     return HttpResponse('hyyy')
 
